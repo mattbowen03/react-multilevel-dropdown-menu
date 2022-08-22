@@ -1,73 +1,63 @@
-import { useState, useEffect, useRef } from 'react';
-import Dropdown from './Dropdown';
+import { useState, useEffect, useRef } from "react";
+import Dropdown from "./Dropdown";
+import { HashLink } from "react-router-hash-link";
+import { Link } from "react-router-dom";
 
-import { Link } from 'react-router-dom';
-
-const MenuItems = ({ items, depthLevel }) => {
+const MenuItems = ({ items, depthLevel, handleClick }) => {
   const [dropdown, setDropdown] = useState(false);
 
   let ref = useRef();
 
   useEffect(() => {
     const handler = (event) => {
-      if (
-        dropdown &&
-        ref.current &&
-        !ref.current.contains(event.target)
-      ) {
+      if (dropdown && ref.current && !ref.current.contains(event.target)) {
         setDropdown(false);
       }
     };
-    document.addEventListener('mousedown', handler);
-    document.addEventListener('touchstart', handler);
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
     return () => {
       // Cleanup the event listener
-      document.removeEventListener('mousedown', handler);
-      document.removeEventListener('touchstart', handler);
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
     };
   }, [dropdown]);
 
   const onMouseEnter = () => {
-    window.innerWidth > 960 && setDropdown(true);
+    window.innerWidth > 768 && setDropdown(true);
   };
 
   const onMouseLeave = () => {
-    window.innerWidth > 960 && setDropdown(false);
+    window.innerWidth > 768 && setDropdown(false);
   };
 
   const closeDropdown = () => {
+    console.log("close");
     dropdown && setDropdown(false);
+    (dropdown || !items.submenu) && window.innerWidth <= 768 && handleClick();
   };
 
   return (
     <li
-      className="menu-items"
+      className='menu-items'
       ref={ref}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onClick={closeDropdown}
-    >
+      onClick={closeDropdown}>
       {items.url && items.submenu ? (
         <>
           <button
-            type="button"
-            aria-haspopup="menu"
-            aria-expanded={dropdown ? 'true' : 'false'}
-            onClick={() => setDropdown((prev) => !prev)}
-          >
-            {window.innerWidth < 960 && depthLevel === 0 ? (
+            type='button'
+            aria-haspopup='menu'
+            aria-expanded={dropdown ? "true" : "false"}
+            onClick={() => setDropdown((prev) => !prev)}>
+            {depthLevel === 0 ? (
               items.title
             ) : (
               <Link to={items.url}>{items.title}</Link>
             )}
 
-            {depthLevel > 0 &&
-            window.innerWidth < 960 ? null : depthLevel > 0 &&
-              window.innerWidth > 960 ? (
-              <span>&raquo;</span>
-            ) : (
-              <span className="arrow" />
-            )}
+            {depthLevel > 0 ? null : <span className='arrow' />}
           </button>
           <Dropdown
             depthLevel={depthLevel}
@@ -78,17 +68,12 @@ const MenuItems = ({ items, depthLevel }) => {
       ) : !items.url && items.submenu ? (
         <>
           <button
-            type="button"
-            aria-haspopup="menu"
-            aria-expanded={dropdown ? 'true' : 'false'}
-            onClick={() => setDropdown((prev) => !prev)}
-          >
-            {items.title}{' '}
-            {depthLevel > 0 ? (
-              <span>&raquo;</span>
-            ) : (
-              <span className="arrow" />
-            )}
+            type='button'
+            aria-haspopup='menu'
+            aria-expanded={dropdown ? "true" : "false"}
+            onClick={() => setDropdown((prev) => !prev)}>
+            {items.title}{" "}
+            {depthLevel > 0 ? <span>&raquo;</span> : <span className='arrow' />}
           </button>
           <Dropdown
             depthLevel={depthLevel}
@@ -97,7 +82,7 @@ const MenuItems = ({ items, depthLevel }) => {
           />
         </>
       ) : (
-        <Link to={items.url}>{items.title}</Link>
+        <HashLink to={items.url}>{items.title}</HashLink>
       )}
     </li>
   );

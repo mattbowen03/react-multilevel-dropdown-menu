@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -19,6 +20,10 @@ header {
   max-width: 1200px;
   margin: 0 auto;
   padding: 10px 20px;
+}
+
+.hamburger {
+  display: none;
 }
 
 .logo {
@@ -123,4 +128,63 @@ button span {
 .content a {
   color: #cc3852;
   margin-right: 10px;
+}
+
+/* TEMP!!! */
+#about1,
+#about2,
+#about3,
+#about4 {
+  height: 600px;
+  width: 100%;
+  background-color: olive;
+  margin: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .menus {
+    flex-direction: column;
+    position: fixed;
+    transform: translateY(-100%);
+    transition: transform 0.4s;
+    width: 100%;
+    height: 100%;
+    background-color: pink;
+    left: 0;
+    top: 0;
+    z-index: 98;
+  }
+
+  .showMenus {
+    transform: translateY(0);
+  }
+
+  .dropdown {
+    position: relative;
+  }
+
+  .hamburger {
+    display:block;
+    position: fixed;
+    z-index: 100;
+    right: 0;
+    top: 0;
+  }
+
+  .nav-area {
+    justify-content: space-between;
+  }
+
+  .menu-items > a, .menu-items button {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .menus .menu-items {
+    width: 100%;
+  }
+
+  .dropdown {
+    border-radius: 0;
+  }
 }
